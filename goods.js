@@ -52,18 +52,20 @@ function renderItems(obj) {
 }
 document.querySelector(".goods").append(renderItems(cart));
 
-const data = new Map();
 document.querySelector(".goods").addEventListener("click", setDatainLocal);
 
-function setDatainLocal() {
+function setDatainLocal(event) {
   if (event.target.classList.contains("to-cart")) {
-    let articul = event.target.dataset["articul"];
-    if (typeof data[articul] === "undefined") {
-      data[articul] = cart[articul];
-      data[articul]["count"] = 1;
+    const articul = event.target.dataset["articul"];
+    const existingData = JSON.parse(localStorage.getItem("cart")) || {};
+
+    if (typeof existingData[articul] === "undefined") {
+      existingData[articul] = cart[articul];
+      existingData[articul]["count"] = 1;
     } else {
-      data[articul]["count"]++;
+      existingData[articul]["count"]++;
     }
-    localStorage.setItem("cart", JSON.stringify(data));
+
+    localStorage.setItem("cart", JSON.stringify(existingData));
   }
 }
